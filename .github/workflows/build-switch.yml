@@ -1,0 +1,30 @@
+name: Build Switch Homebrew
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'Switch/**'
+      - '.github/workflows/build-switch.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: devkitpro/devkita64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build NRO
+        working-directory: Switch
+        run: |
+          make
+
+      - name: Upload NRO
+        uses: actions/upload-artifact@v4
+        with:
+          name: SwitchStream-nro
+          path: Switch/*.nro
